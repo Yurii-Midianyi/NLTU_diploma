@@ -1,19 +1,27 @@
 package com.nltu.app.diplomaproject.controller;
 
 import com.nltu.app.diplomaproject.entity.User;
-import com.nltu.app.diplomaproject.repository.UserRepo;
+import com.nltu.app.diplomaproject.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
+    private final UserService userService;
 
-    private final UserRepo userRepo;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    public UserController(UserRepo userRepo) {
-        this.userRepo = userRepo;
+    @PostMapping
+    public ResponseEntity<User> saveUser(@RequestBody User user){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
     }
 
     @GetMapping("/get")
@@ -30,7 +38,7 @@ public class UserController {
         newUser.setEmail("testUser");
         newUser.setPassword("pass");
         // Save the user to the database
-        userRepo.save(newUser);
+        userService.save(newUser);
         return "User added successfully!";
     }
 
