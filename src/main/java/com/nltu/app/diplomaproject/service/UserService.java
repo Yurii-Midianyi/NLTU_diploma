@@ -1,8 +1,9 @@
 package com.nltu.app.diplomaproject.service;
+
+import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.entity.User;
 
-
-public interface UserService /*extends UserDetailsService*/ {
+public interface UserService{
 
     /**
      * Method that allows you to save new {@link User}.
@@ -10,5 +11,5 @@ public interface UserService /*extends UserDetailsService*/ {
      * @param user a value of {@link User}
      * @author Yurii Midianyi
      */
-    User save (User user);
+    UserDto save (User user);
 }

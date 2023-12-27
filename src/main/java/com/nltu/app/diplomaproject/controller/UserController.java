@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.controller;
 
+import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.entity.User;
 import com.nltu.app.diplomaproject.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<UserDto> saveUser(@RequestBody User user){
         return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
     }
 
