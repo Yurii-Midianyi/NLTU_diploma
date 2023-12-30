@@ -20,27 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserDto> saveUser(@RequestBody User user){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(user));
-    }
-
     @GetMapping("/get")
     public String getUsers(){
         return "success";
     }
 
 
-
-    @GetMapping("/test")
-    public String addUser() {
-        // Create a new user
-        User newUser = new User();
-        newUser.setEmail("testUser");
-        newUser.setPassword("pass");
-        // Save the user to the database
-        userService.save(newUser);
-        return "User added successfully!";
-    }
 
 }
