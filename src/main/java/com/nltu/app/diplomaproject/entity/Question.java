@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,6 +22,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionText;
+    @JsonManagedReference
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -83,16 +85,15 @@ public class Question {
     public List<User> getParticipants() {
         return participants;
     }
-
     public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
 
-    public Boolean getAnonymous() {
+    public Boolean getIsAnonymous() {
         return isAnonymous;
     }
 
-    public void setAnonymous(Boolean anonymous) {
+    public void setIsAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
     }
 }
