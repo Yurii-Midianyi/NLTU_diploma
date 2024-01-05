@@ -14,8 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -56,5 +54,10 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto getQuestion(Long id) {
         Question question = questionRepo.findById(id).orElseThrow(()->new RuntimeException("Question not found"));
         return modelMapper.map(question, QuestionDto.class);
+    }
+
+    @Override
+    public void deleteQuestion(Long id) {
+        questionRepo.deleteById(id);
     }
 }
