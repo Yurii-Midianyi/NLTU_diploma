@@ -13,7 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,5 +62,25 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestion(Long id) {
         questionRepo.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public QuestionDto updateQuestion(Long id, QuestionDto questionDto) {
+        Question question = questionRepo.findById(id).orElseThrow(() ->
+                new RuntimeException("Question with this id does not exists"));
+
+        answerRepo.deleteAllByQuestionId(id);
+
+        question.setQuestionText(questionDto.getQuestionText());
+        question.setAnswers(questionDto.getAnswers().stream()
+                .map(a->{
+                    Answer answer = modelMapper.map(a, Answer.class);
+                    answer.setQuestion(question);
+                    return answer;})
+                .collect(Collectors.toList()));
+        question.setIsAnonymous(questionDto.getIsAnonymous());
+        questionRepo.save(question);
+        return modelMapper.map(question, QuestionDto.class);
     }
 }
