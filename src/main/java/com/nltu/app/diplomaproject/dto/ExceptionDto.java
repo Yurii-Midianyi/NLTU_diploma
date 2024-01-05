@@ -1,7 +1,5 @@
 package com.nltu.app.diplomaproject.dto;
 
-import org.springframework.http.HttpStatus;
-
 public class ExceptionDto {
     private final String message;
 

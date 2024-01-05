@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(value = {RequestException.class})
-    public ResponseEntity<Object> handleRequestException(RequestException e){
+    @ExceptionHandler(value = {QuestionNotFoundException.class})
+    public ResponseEntity<Object> handleRequestException(QuestionNotFoundException e){
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
     }

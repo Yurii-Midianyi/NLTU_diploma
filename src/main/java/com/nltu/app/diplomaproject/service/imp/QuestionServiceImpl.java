@@ -4,17 +4,19 @@ import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Answer;
 import com.nltu.app.diplomaproject.entity.Question;
 import com.nltu.app.diplomaproject.entity.User;
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import com.nltu.app.diplomaproject.exceptions.QuestionNotFoundException;
 import com.nltu.app.diplomaproject.repository.AnswerRepo;
 import com.nltu.app.diplomaproject.repository.QuestionRepo;
 import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,14 +63,19 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void deleteQuestion(Long id) {
-        questionRepo.deleteById(id);
+        try {
+            questionRepo.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND);
+        }
     }
 
     @Transactional
     @Override
     public QuestionDto updateQuestion(Long id, QuestionDto questionDto) {
         Question question = questionRepo.findById(id).orElseThrow(() ->
-                new RuntimeException("Question with this id does not exists"));
+                new RuntimeException(ExceptionMessage.QUESTION_NOT_FOUND));
 
         answerRepo.deleteAllByQuestionId(id);
 

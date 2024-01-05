@@ -1,13 +1,10 @@
 package com.nltu.app.diplomaproject.controller;
 
 import com.nltu.app.diplomaproject.dto.QuestionDto;
-import com.nltu.app.diplomaproject.entity.Answer;
 import com.nltu.app.diplomaproject.entity.Question;
-import com.nltu.app.diplomaproject.exceptions.RequestException;
 import com.nltu.app.diplomaproject.service.AnswerService;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/questions")
