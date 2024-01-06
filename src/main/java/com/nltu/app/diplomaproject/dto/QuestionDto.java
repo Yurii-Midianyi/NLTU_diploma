@@ -3,12 +3,14 @@ package com.nltu.app.diplomaproject.dto;
 import java.util.List;
 
 public class QuestionDto {
+    private Long id;
     private String questionText;
     private List<AnswerDto> answers;
     private Boolean isAnonymous;
 
     public QuestionDto() {}
-    public QuestionDto(String questionText, List<AnswerDto> answers, Boolean isAnonymous) {
+    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous) {
+        this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.isAnonymous = isAnonymous;
@@ -36,5 +38,13 @@ public class QuestionDto {
 
     public void setIsAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
