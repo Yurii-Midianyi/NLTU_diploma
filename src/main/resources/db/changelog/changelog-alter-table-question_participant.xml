@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="7" author="Yurii">
+        <addColumn tableName="question_participant">
+            <column name="answer_id" type="BIGINT"></column>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="question_participant"
+                baseColumnNames="answer_id"
+                constraintName="fk_answer_id"
+                referencedTableName="answer"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

@@ -11,4 +11,5 @@
     <include file="db/changelog/changelog-create-table-question.xml"/>
     <include file="db/changelog/changelog-create-table-answer.xml"/>
     <include file="db/changelog/changelog-create-table-question_participant.xml"/>
+    <include file="db/changelog/changelog-alter-table-question_participant.xml"/>
 </databaseChangeLog>
