@@ -3,7 +3,6 @@ package com.nltu.app.diplomaproject.service;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Question;
 import java.util.List;
-import java.util.Optional;
 
 public interface QuestionService {
     List<QuestionDto> getAllQuestions();
@@ -15,4 +14,6 @@ public interface QuestionService {
     void deleteQuestion(Long id);
 
     QuestionDto updateQuestion(Long id, QuestionDto questionDto);
+
+    String voteQuestion(Long questionId, List<Long> answerIds);
 }

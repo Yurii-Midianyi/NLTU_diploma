@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -55,5 +56,10 @@ public class QuestionController {
     @PatchMapping("/{id}")
     public ResponseEntity<QuestionDto> updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto){
         return ResponseEntity.ok(questionService.updateQuestion(id, questionDto));
+    }
+
+    @PostMapping("/vote/{id}")
+    public ResponseEntity<String> voteQuestion(@PathVariable Long id, @RequestParam List<Long> answerIds){
+        return ResponseEntity.ok(questionService.voteQuestion(id, answerIds));
     }
 }
