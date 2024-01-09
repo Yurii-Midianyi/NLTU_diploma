@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.controller;
 
+import com.nltu.app.diplomaproject.dto.PollResultsDto;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Question;
 import com.nltu.app.diplomaproject.service.AnswerService;
@@ -61,5 +62,10 @@ public class QuestionController {
     @PostMapping("/vote/{id}")
     public ResponseEntity<String> voteQuestion(@PathVariable Long id, @RequestParam List<Long> answerIds){
         return ResponseEntity.ok(questionService.voteQuestion(id, answerIds));
+    }
+
+    @GetMapping("/results/{id}")
+    public ResponseEntity<PollResultsDto> getResultsOfVoting(@PathVariable Long id){
+        return ResponseEntity.ok(questionService.getResults(id));
     }
 }
