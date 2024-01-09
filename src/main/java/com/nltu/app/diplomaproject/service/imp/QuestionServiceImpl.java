@@ -24,7 +24,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -141,8 +143,20 @@ public class QuestionServiceImpl implements QuestionService {
         PollResultsDto pollResultsDto = new PollResultsDto();
         pollResultsDto.setCountOfParticipants(questionParticipantRepo.countByQuestionId(id));
         List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);
-        pollResultsDto.setAnswerResults(answerResults);
+        List<Answer> initializedAnswers = answerRepo.findAllByQuestionId(id);
+        Map<String, AnswerResultDto> answerResultMap = new HashMap<>();
 
+        // Initialize the map with existing answerResults
+        for (AnswerResultDto result : answerResults) {
+            answerResultMap.put(result.getAnswerText(), result);
+        }
+
+        // Add new answers with count 0 to the map
+        for (Answer a : initializedAnswers) {
+            answerResultMap.putIfAbsent(a.getAnswerText(), new AnswerResultDto(a.getAnswerText(), 0L));
+        }
+
+        pollResultsDto.setAnswerResults(new ArrayList<>(answerResultMap.values()));
         return pollResultsDto;
     }
 }
