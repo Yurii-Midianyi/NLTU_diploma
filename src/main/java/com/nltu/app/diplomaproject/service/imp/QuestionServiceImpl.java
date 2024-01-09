@@ -136,7 +136,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public PollResultsDto getResults(Long id) {
         PollResultsDto pollResultsDto = new PollResultsDto();
-        pollResultsDto.setCountOfParticipants(questionParticipantRepo.countByQuestionId(id));
+        pollResultsDto.setCountOfParticipants(questionParticipantRepo.countDistinctUserByQuestionId(id));
         List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);
         List<Answer> initializedAnswers = answerRepo.findAllByQuestionId(id);
         Map<String, AnswerResultDto> answerResultMap = new HashMap<>();

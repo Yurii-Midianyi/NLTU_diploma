@@ -15,9 +15,13 @@ import java.util.List;
 public interface QuestionParticipantRepo extends JpaRepository<QuestionParticipant, Long> {
     public Boolean existsByUserAndQuestion(User user, Question question);
     public void deleteAllByUserAndQuestion(User user, Question question);
-    public Long countByQuestionId(Long id);
 
-    @Query("SELECT NEW com.nltu.app.diplomaproject.dto.AnswerResultDto(qp.answer.answerText, COUNT(qp.answer)) " +
+    @Query( "SELECT count(DISTINCT qp.user) " +
+            "FROM QuestionParticipant qp " +
+            "WHERE qp.question.id=:id")
+    public Long countDistinctUserByQuestionId(Long id);
+
+    @Query( "SELECT NEW com.nltu.app.diplomaproject.dto.AnswerResultDto(qp.answer.answerText, COUNT(qp.answer)) " +
             "FROM QuestionParticipant qp " +
             "WHERE qp.question.id = :questionId " +
             "GROUP BY qp.answer.answerText")
