@@ -1,5 +1,7 @@
 package com.nltu.app.diplomaproject.service.imp;
 
+import com.nltu.app.diplomaproject.dto.AnswerResultDto;
+import com.nltu.app.diplomaproject.dto.PollResultsDto;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Answer;
 import com.nltu.app.diplomaproject.entity.Question;
@@ -21,10 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -134,5 +136,27 @@ public class QuestionServiceImpl implements QuestionService {
             questionParticipantRepo.save(questionParticipant);
         }
         return "Your vote is successfully saved";
+    }
+
+    @Override
+    public PollResultsDto getResults(Long id) {
+        PollResultsDto pollResultsDto = new PollResultsDto();
+        pollResultsDto.setCountOfParticipants(questionParticipantRepo.countByQuestionId(id));
+        List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);
+        List<Answer> initializedAnswers = answerRepo.findAllByQuestionId(id);
+        Map<String, AnswerResultDto> answerResultMap = new HashMap<>();
+
+        // Initialize the map with existing answerResults
+        for (AnswerResultDto result : answerResults) {
+            answerResultMap.put(result.getAnswerText(), result);
+        }
+
+        // Add new answers with count 0 to the map
+        for (Answer a : initializedAnswers) {
+            answerResultMap.putIfAbsent(a.getAnswerText(), new AnswerResultDto(a.getAnswerText(), 0L));
+        }
+
+        pollResultsDto.setAnswerResults(new ArrayList<>(answerResultMap.values()));
+        return pollResultsDto;
     }
 }
