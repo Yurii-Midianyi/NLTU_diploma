@@ -16,6 +16,7 @@ import com.nltu.app.diplomaproject.repository.QuestionParticipantRepo;
 import com.nltu.app.diplomaproject.repository.QuestionRepo;
 import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.QuestionService;
+import com.nltu.app.diplomaproject.service.ResultMessages;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
@@ -55,10 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDto create(Question question) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        User user = userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
-                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
+        User user = getAuthenticatedUser();
         question.setOrganizer(user);
 
         List<Answer> answers = question.getAnswers();
@@ -107,10 +105,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public String voteQuestion(Long questionId, List<Long> answerIds) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        User user = userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
-                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
+        User user = getAuthenticatedUser();
         Question question = questionRepo.findById(questionId).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
 
@@ -135,7 +130,7 @@ public class QuestionServiceImpl implements QuestionService {
             
             questionParticipantRepo.save(questionParticipant);
         }
-        return "Your vote is successfully saved";
+        return ResultMessages.VOTE_SAVED;
     }
 
     @Override
@@ -158,5 +153,22 @@ public class QuestionServiceImpl implements QuestionService {
 
         pollResultsDto.setAnswerResults(new ArrayList<>(answerResultMap.values()));
         return pollResultsDto;
+    }
+
+    @Override
+    @Transactional
+    public String cancelVote(Long questionId) {
+        User user = getAuthenticatedUser();
+        Question question = questionRepo.findById(questionId).orElseThrow(()->
+                new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+        questionParticipantRepo.deleteAllByUserAndQuestion(user, question);
+        return ResultMessages.VOTE_CANCELED;
+    }
+
+    public User getAuthenticatedUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
+                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
     }
 }

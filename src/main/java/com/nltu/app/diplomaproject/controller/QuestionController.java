@@ -59,13 +59,19 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.updateQuestion(id, questionDto));
     }
 
-    @PostMapping("/vote/{id}")
+    @PostMapping("/{id}/vote")
     public ResponseEntity<String> voteQuestion(@PathVariable Long id, @RequestParam List<Long> answerIds){
         return ResponseEntity.ok(questionService.voteQuestion(id, answerIds));
+    }
+
+    @PostMapping("/{id}/vote/cancel")
+    public ResponseEntity<String> voteCancelQuestion(@PathVariable Long id){
+        return ResponseEntity.ok(questionService.cancelVote(id));
     }
 
     @GetMapping("/results/{id}")
     public ResponseEntity<PollResultsDto> getResultsOfVoting(@PathVariable Long id){
         return ResponseEntity.ok(questionService.getResults(id));
     }
+
 }

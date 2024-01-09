@@ -22,4 +22,5 @@ public interface QuestionParticipantRepo extends JpaRepository<QuestionParticipa
             "WHERE qp.question.id = :questionId " +
             "GROUP BY qp.answer.answerText")
     List<AnswerResultDto> countAnswerResults(Long questionId);
+
 }
