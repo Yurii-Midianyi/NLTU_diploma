@@ -1,13 +1,21 @@
 package com.nltu.app.diplomaproject.dto;
 
+import com.nltu.app.diplomaproject.annotations.NotEmptyAnswers;
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionDto {
     private Long id;
+    @NotBlank(message = ExceptionMessage.QUESTION_VALIDATION_FAIL)
     private String questionText;
+    @NotEmptyAnswers
     private List<AnswerDto> answers;
     private Boolean isAnonymous;
+    @Future(message = ExceptionMessage.END_DATE_VALIDATION_FAIL)
     private LocalDateTime endDateTime;
 
     public QuestionDto() {}

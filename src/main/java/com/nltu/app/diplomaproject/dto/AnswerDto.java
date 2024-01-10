@@ -1,7 +1,12 @@
 package com.nltu.app.diplomaproject.dto;
 
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import jakarta.validation.constraints.NotBlank;
+
+
 public class AnswerDto {
     private Long id;
+
     private String answerText;
 
     public AnswerDto() {}

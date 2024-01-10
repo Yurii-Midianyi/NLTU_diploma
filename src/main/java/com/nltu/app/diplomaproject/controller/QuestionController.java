@@ -5,9 +5,11 @@ import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Question;
 import com.nltu.app.diplomaproject.service.AnswerService;
 import com.nltu.app.diplomaproject.service.QuestionService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/questions")
@@ -38,7 +41,11 @@ public class QuestionController {
     }
 
     @PostMapping
-    public ResponseEntity<QuestionDto> createQuestion(@RequestBody QuestionDto questionDto){
+    public ResponseEntity<?> createQuestion(@Valid @RequestBody QuestionDto questionDto,
+                                                      BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
         Question question = modelMapper.map(questionDto, Question.class);
         return ResponseEntity.ok(questionService.create(question));
     }
@@ -55,7 +62,12 @@ public class QuestionController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto){
+    public ResponseEntity<?> updateQuestion(@Valid @PathVariable Long id,
+                                                      @RequestBody QuestionDto questionDto,
+                                                      BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+        }
         return ResponseEntity.ok(questionService.updateQuestion(id, questionDto));
     }
 
