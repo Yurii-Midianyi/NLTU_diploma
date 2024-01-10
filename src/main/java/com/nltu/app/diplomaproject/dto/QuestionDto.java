@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionDto {
@@ -7,13 +8,15 @@ public class QuestionDto {
     private String questionText;
     private List<AnswerDto> answers;
     private Boolean isAnonymous;
+    private LocalDateTime endDateTime;
 
     public QuestionDto() {}
-    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous) {
+    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous, LocalDateTime endDateTime) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.isAnonymous = isAnonymous;
+        this.endDateTime = endDateTime;
     }
 
     public String getQuestionText() {
@@ -46,5 +49,13 @@ public class QuestionDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 }

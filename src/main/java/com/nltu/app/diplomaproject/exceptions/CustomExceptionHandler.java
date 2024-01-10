@@ -16,12 +16,6 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
     }
 
-    @ExceptionHandler(value = {EmptyResultDataAccessException.class})
-    public ResponseEntity<Object> handleEmptyResultDataAccessException(){
-        ExceptionDto exceptionDto = new ExceptionDto("The object was not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
-    }
-
     @ExceptionHandler(value = {AnswerNotFoundException.class})
     public ResponseEntity<Object> handleAnswerNotFoundException(AnswerNotFoundException e){
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
@@ -33,4 +27,9 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
     }
 
+    @ExceptionHandler(value = {VotingPeriodEndedException.class})
+    public ResponseEntity<Object> handleVotingPeriodEndedException(VotingPeriodEndedException e){
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
+    }
 }

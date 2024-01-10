@@ -12,7 +12,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -39,15 +41,31 @@ public class Question {
 
     private Boolean isAnonymous;
 
+    private LocalDateTime endDateTime;
+
     public Question(){}
 
-    public Question(Long id, String questionText, List<Answer> answers, User organizer, List<User> participants, Boolean isAnonymous) {
+    public Question(Long id,
+                    String questionText,
+                    List<Answer> answers,
+                    User organizer,
+                    List<User> participants,
+                    Boolean isAnonymous,
+                    LocalDateTime endDateTime) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.organizer = organizer;
         this.participants = participants;
         this.isAnonymous = isAnonymous;
+        this.endDateTime = endDateTime;
+    }
+
+    @PrePersist
+    public void setDefaultEndDate() {
+        if (endDateTime == null) {
+            endDateTime = LocalDateTime.now().plusDays(30);
+        }
     }
 
     public Long getId() {
@@ -95,5 +113,13 @@ public class Question {
 
     public void setIsAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 }

@@ -5,4 +5,5 @@ public abstract class ExceptionMessage {
     public static final String USER_NOT_FOUND = "User was not found";
     public static final String ANSWER_NOT_FOUND = "Answer was not found";
     public static final String WRONG_ANSWER_ID = "Wrong answer id";
+    public static final String VOTING_PERIOD_ENDED = "Voting period for this question has ended" ;
 }

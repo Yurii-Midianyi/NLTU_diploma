@@ -11,6 +11,7 @@ import com.nltu.app.diplomaproject.exceptions.AnswerNotFoundException;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import com.nltu.app.diplomaproject.exceptions.NonExistingAnswerForQuestionException;
 import com.nltu.app.diplomaproject.exceptions.QuestionNotFoundException;
+import com.nltu.app.diplomaproject.exceptions.VotingPeriodEndedException;
 import com.nltu.app.diplomaproject.repository.AnswerRepo;
 import com.nltu.app.diplomaproject.repository.QuestionParticipantRepo;
 import com.nltu.app.diplomaproject.repository.QuestionRepo;
@@ -24,6 +25,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +111,13 @@ public class QuestionServiceImpl implements QuestionService {
         User user = getAuthenticatedUser();
         Question question = questionRepo.findById(questionId).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+
+        LocalDateTime endDateTime = question.getEndDateTime();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        if (currentDateTime.isAfter(endDateTime)) {
+            throw new VotingPeriodEndedException(ExceptionMessage.VOTING_PERIOD_ENDED);
+        }
 
         if(questionParticipantRepo.existsByUserAndQuestion(user, question)){
             questionParticipantRepo.deleteAllByUserAndQuestion(user, question);
