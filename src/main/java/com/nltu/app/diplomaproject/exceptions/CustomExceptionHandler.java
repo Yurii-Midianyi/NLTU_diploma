@@ -32,4 +32,10 @@ public class CustomExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
     }
+
+    @ExceptionHandler(value = {EmailAlreadyTakenException.class})
+    public ResponseEntity<Object> handleEmailAlreadyTaken(EmailAlreadyTakenException e){
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionDto);
+    }
 }

@@ -145,6 +145,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PollResultsDto getResults(Long id) {
+        questionRepo.findById(id).orElseThrow(()->
+                new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
         PollResultsDto pollResultsDto = new PollResultsDto();
         pollResultsDto.setCountOfParticipants(questionParticipantRepo.countDistinctUserByQuestionId(id));
         List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);

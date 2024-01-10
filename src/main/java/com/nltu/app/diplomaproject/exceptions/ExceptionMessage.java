@@ -14,4 +14,5 @@ public abstract class ExceptionMessage {
     public static final String ANSWER_VALIDATION_FAIL = "Answer can not be empty";
     public static final String QUESTION_VALIDATION_FAIL = "Question can not be empty";
     public static final String END_DATE_VALIDATION_FAIL = "End date must be in the future";
+    public static final String EMAIL_ALREADY_TAKEN = "Email is already registered";
 }
