@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.dto;
 
+
 public class UserLoginDto {
     private String email;
     private String password;

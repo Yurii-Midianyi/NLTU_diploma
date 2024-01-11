@@ -1,19 +1,30 @@
 package com.nltu.app.diplomaproject.dto;
 
+import com.nltu.app.diplomaproject.annotations.NotEmptyAnswers;
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionDto {
     private Long id;
+    @NotBlank(message = ExceptionMessage.QUESTION_VALIDATION_FAIL)
     private String questionText;
+    @NotEmptyAnswers
     private List<AnswerDto> answers;
     private Boolean isAnonymous;
+    @Future(message = ExceptionMessage.END_DATE_VALIDATION_FAIL)
+    private LocalDateTime endDateTime;
 
     public QuestionDto() {}
-    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous) {
+    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous, LocalDateTime endDateTime) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.isAnonymous = isAnonymous;
+        this.endDateTime = endDateTime;
     }
 
     public String getQuestionText() {
@@ -46,5 +57,13 @@ public class QuestionDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 }

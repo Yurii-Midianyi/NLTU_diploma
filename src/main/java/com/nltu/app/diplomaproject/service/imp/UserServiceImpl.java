@@ -6,6 +6,8 @@ import com.nltu.app.diplomaproject.dto.UserLoginDto;
 import com.nltu.app.diplomaproject.dto.UserRegistrationDto;
 import com.nltu.app.diplomaproject.entity.User;
 import com.nltu.app.diplomaproject.enums.Role;
+import com.nltu.app.diplomaproject.exceptions.EmailAlreadyTakenException;
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String registerNewUser(UserRegistrationDto registrationDto) {
+        userRepo.findByEmail(registrationDto.getEmail())
+                .ifPresent(a->{throw new EmailAlreadyTakenException(ExceptionMessage.EMAIL_ALREADY_TAKEN);});
         var user = new User.Builder()
                 .firstName(registrationDto.getFirstName())
                 .lastName(registrationDto.getLastName())
