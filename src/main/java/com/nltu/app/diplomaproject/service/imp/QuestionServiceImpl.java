@@ -92,6 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
                 new RuntimeException(ExceptionMessage.QUESTION_NOT_FOUND));
 
         answerRepo.deleteAllByQuestionId(id);
+        questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(), question);
 
         question.setQuestionText(questionDto.getQuestionText());
         question.setAnswers(questionDto.getAnswers().stream()
