@@ -18,13 +18,11 @@ import com.nltu.app.diplomaproject.repository.QuestionRepo;
 import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import com.nltu.app.diplomaproject.service.ResultMessages;
+import static com.nltu.app.diplomaproject.service.imp.UserServiceImpl.getAuthenticatedUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +59,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDto create(Question question) {
-        User user = getAuthenticatedUser();
+        User user = getAuthenticatedUser(userRepo);
         question.setOrganizer(user);
 
         List<Answer> answers = question.getAnswers();
@@ -91,10 +89,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDto updateQuestion(Long id, QuestionDto questionDto) {
         Question question = questionRepo.findById(id).orElseThrow(() ->
-                new RuntimeException(ExceptionMessage.QUESTION_NOT_FOUND));
+                new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
 
         answerRepo.deleteAllByQuestionId(id);
-        questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(), question);
+        questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(userRepo), question);
 
         question.setQuestionText(questionDto.getQuestionText());
         question.setAnswers(questionDto.getAnswers().stream()
@@ -111,7 +109,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public String voteQuestion(Long questionId, List<Long> answerIds) {
-        User user = getAuthenticatedUser();
+        User user = getAuthenticatedUser(userRepo);
         Question question = questionRepo.findById(questionId).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
 
@@ -173,17 +171,17 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     @Transactional
     public String cancelVote(Long questionId) {
-        User user = getAuthenticatedUser();
+        User user = getAuthenticatedUser(userRepo);
         Question question = questionRepo.findById(questionId).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
         questionParticipantRepo.deleteAllByUserAndQuestion(user, question);
         return ResultMessages.VOTE_CANCELED;
     }
 
-    public User getAuthenticatedUser(){
+    /*public User getAuthenticatedUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         return userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
                 new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
-    }
+    }*/
 }
