@@ -1,5 +1,6 @@
 package com.nltu.app.diplomaproject.dto;
 
+import com.nltu.app.diplomaproject.annotations.ListMaxSize;
 import com.nltu.app.diplomaproject.annotations.NotEmptyAnswers;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import jakarta.validation.constraints.Future;
@@ -13,6 +14,7 @@ public class QuestionDto {
     @NotBlank(message = ExceptionMessage.QUESTION_VALIDATION_FAIL)
     private String questionText;
     @NotEmptyAnswers
+    @ListMaxSize(message = ExceptionMessage.ANSWER_SIZE_FAIL)
     private List<AnswerDto> answers;
     private Boolean isAnonymous;
     @Future(message = ExceptionMessage.END_DATE_VALIDATION_FAIL)
