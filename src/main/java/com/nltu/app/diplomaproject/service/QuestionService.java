@@ -3,12 +3,12 @@ package com.nltu.app.diplomaproject.service;
 import com.nltu.app.diplomaproject.dto.PollResultsDto;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Question;
-import com.nltu.app.diplomaproject.entity.User;
-
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface QuestionService {
-    List<QuestionDto> getAllQuestions();
+    Page<QuestionDto> getAllQuestions(Pageable pageable);
 
     QuestionDto create(Question question);
 

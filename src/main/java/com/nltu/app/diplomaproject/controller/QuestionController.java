@@ -7,6 +7,8 @@ import com.nltu.app.diplomaproject.service.AnswerService;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,8 +38,8 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestionDto>> getAllQuestions(){
-        return ResponseEntity.ok(questionService.getAllQuestions());
+    public ResponseEntity<Page<QuestionDto>> getAllQuestions(Pageable pageable){
+        return ResponseEntity.ok(questionService.getAllQuestions(pageable));
     }
 
     @PostMapping

@@ -20,6 +20,8 @@ import com.nltu.app.diplomaproject.service.QuestionService;
 import com.nltu.app.diplomaproject.service.ResultMessages;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -52,9 +54,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<QuestionDto> getAllQuestions() {
-        List<Question> questions = questionRepo.findAll();
-        return questions.stream().map(a->modelMapper.map(a, QuestionDto.class)).toList();
+    public Page<QuestionDto> getAllQuestions(Pageable pageable) {
+        return questionRepo.findAll(pageable)
+                .map(question -> modelMapper.map(question, QuestionDto.class));
     }
 
     @Override
