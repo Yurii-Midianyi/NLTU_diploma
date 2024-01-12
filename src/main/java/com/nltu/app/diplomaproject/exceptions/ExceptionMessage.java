@@ -15,4 +15,6 @@ public abstract class ExceptionMessage {
     public static final String QUESTION_VALIDATION_FAIL = "Question can not be empty";
     public static final String END_DATE_VALIDATION_FAIL = "End date must be in the future";
     public static final String EMAIL_ALREADY_TAKEN = "Email is already registered";
+    public static final String ANSWER_SIZE_FAIL = "There can not be more than 10 answers";
+    public static final String LIST_SIZE_FAIL = "The list of elements is too big";
 }
