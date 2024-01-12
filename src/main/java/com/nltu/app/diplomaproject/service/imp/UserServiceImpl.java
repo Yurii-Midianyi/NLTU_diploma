@@ -12,6 +12,8 @@ import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,5 +55,12 @@ public class UserServiceImpl implements UserService {
         var user = userRepo.findByEmail(userLoginDto.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
+    }
+
+    public static User getAuthenticatedUser(UserRepo userRepo){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
+                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
     }
 }
