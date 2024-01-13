@@ -7,8 +7,6 @@ import com.nltu.app.diplomaproject.dto.UserRegistrationDto;
 import com.nltu.app.diplomaproject.entity.User;
 
 public interface UserService{
-
-
     /**
      * Method register user {@link User}.
      *
@@ -24,4 +22,6 @@ public interface UserService{
      * @author Yurii Midianyi
      */
     AuthenticationResponse authenticate(UserLoginDto userLoginDto);
+
+    UserDto getUser(Long id);
 }

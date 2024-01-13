@@ -25,9 +25,9 @@ public class User implements UserDetails {
     private String email;
     @Column(nullable = false)
     private String password;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Boolean enabled = true;
 
     public User(){}
 
@@ -113,7 +113,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
     public static class Builder {
