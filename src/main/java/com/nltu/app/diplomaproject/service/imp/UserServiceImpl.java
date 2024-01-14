@@ -3,6 +3,7 @@ package com.nltu.app.diplomaproject.service.imp;
 import com.nltu.app.diplomaproject.config.JwtService;
 import com.nltu.app.diplomaproject.dto.AuthenticationResponse;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
+import com.nltu.app.diplomaproject.dto.QuestionUserParticipatedDto;
 import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.dto.UserLoginDto;
 import com.nltu.app.diplomaproject.dto.UserRegistrationDto;
@@ -15,6 +16,8 @@ import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.UserService;
 import java.util.List;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -83,9 +86,21 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findById(id).orElseThrow(()->
                 new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
         UserDto result = modelMapper.map(user, UserDto.class);
-        List<QuestionDto> questionDtos = questionRepo.findAllByUserParticipated(id)
-                .stream().map(q->modelMapper.map(q, QuestionDto.class)).toList();
-        result.setQuestionDtos(questionDtos);
+        List<QuestionUserParticipatedDto> questionDtos = questionRepo.findAllByUserParticipated(id)
+                .stream().map(q->modelMapper.map(q, QuestionUserParticipatedDto.class)).toList();
+        result.setQuestionsUserParticipated(questionDtos);
         return result;
+    }
+
+    @Override
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        return userRepo.findAll(pageable)
+                .map(user -> {
+                    UserDto userDto = modelMapper.map(user, UserDto.class);
+                    List<QuestionUserParticipatedDto> questionDtos = questionRepo.findAllByUserParticipated(user.getId())
+                            .stream().map(q -> modelMapper.map(q, QuestionUserParticipatedDto.class)).toList();
+                    userDto.setQuestionsUserParticipated(questionDtos);
+                    return userDto;
+                });
     }
 }

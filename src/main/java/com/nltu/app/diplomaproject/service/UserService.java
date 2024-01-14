@@ -5,6 +5,8 @@ import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.dto.UserLoginDto;
 import com.nltu.app.diplomaproject.dto.UserRegistrationDto;
 import com.nltu.app.diplomaproject.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService{
     /**
@@ -23,5 +25,19 @@ public interface UserService{
      */
     AuthenticationResponse authenticate(UserLoginDto userLoginDto);
 
+    /**
+     * Method gets user {@link User} by id.
+     *
+     * @param id user's id
+     * @author Yurii Midianyi
+     */
     UserDto getUser(Long id);
+
+    /**
+     * Method gets pageable of user {@link User} by id.
+     *
+     * @param pageable of {@link Pageable}
+     * @author Yurii Midianyi
+     */
+    Page<UserDto> getAllUsers(Pageable pageable);
 }

@@ -6,13 +6,16 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    List<QuestionDto> questionDtos;
+    List<QuestionUserParticipatedDto> questionsUserParticipated;
 
-    public UserDto(String firstName, String lastName, String email, List<QuestionDto> questionDtos) {
+    public UserDto(String firstName,
+                   String lastName,
+                   String email,
+                   List<QuestionUserParticipatedDto> questionsUserParticipated) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.questionDtos = questionDtos;
+        this.questionsUserParticipated = questionsUserParticipated;
     }
     public UserDto() {}
 
@@ -40,11 +43,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public List<QuestionDto> getQuestionDtos() {
-        return questionDtos;
+    public List<QuestionUserParticipatedDto> getQuestionsUserParticipated() {
+        return questionsUserParticipated;
     }
 
-    public void setQuestionDtos(List<QuestionDto> questionDtos) {
-        this.questionDtos = questionDtos;
+    public void setQuestionsUserParticipated(List<QuestionUserParticipatedDto> questionsUserParticipated) {
+        this.questionsUserParticipated = questionsUserParticipated;
     }
 }
