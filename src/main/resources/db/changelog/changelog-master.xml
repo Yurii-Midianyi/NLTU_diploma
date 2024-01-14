@@ -14,4 +14,6 @@
     <include file="db/changelog/changelog-alter-table-question_participant.xml"/>
     <include file="db/changelog/changelog-alter-table-question-add-endDateTime.xml"/>
     <include file="db/changelog/changelog-alter-table-user-add-enabled.xml"/>
+    <include file="db/changelog/changelog-add-admin-user-table.xml"/>
+    <include file="db/changelog/changelog-alter-table-user-rename-active.xml"/>
 </databaseChangeLog>

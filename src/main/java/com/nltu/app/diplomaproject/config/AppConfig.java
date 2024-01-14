@@ -31,16 +31,8 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username ->{
-            User user = userRepo.findByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
-
-            if(!user.isEnabled()){
-                throw new DisabledException(ExceptionMessage.USER_SUSPENDED);
-            }
-
-            return user;
-        };
+        return username -> userRepo.findByEmail(username)
+                .orElseThrow(()->new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
     }
 
     @Bean

@@ -26,7 +26,9 @@ public class WebSecurity{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests().requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                .authorizeHttpRequests()
+                    .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/users/suspend", "/users/activate").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

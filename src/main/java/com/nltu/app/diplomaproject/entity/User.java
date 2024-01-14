@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean enabled = true;
+    private Boolean active = true;
 
     public User(){}
 
@@ -82,8 +82,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override
@@ -118,7 +122,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return true;
     }
 
     public static class Builder {
