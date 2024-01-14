@@ -26,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -102,5 +103,23 @@ public class UserServiceImpl implements UserService {
                     userDto.setQuestionsUserParticipated(questionDtos);
                     return userDto;
                 });
+    }
+
+    @Override
+    public void suspendUser(String email) {
+        User user = userRepo.findByEmail(email).orElseThrow(()->
+                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
+
+        user.setEnabled(false);
+        userRepo.save(user);
+    }
+
+    @Override
+    public void activateUser(String email) {
+        User user = userRepo.findByEmail(email).orElseThrow(()->
+                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
+
+        user.setEnabled(true);
+        userRepo.save(user);
     }
 }

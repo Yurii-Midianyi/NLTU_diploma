@@ -40,4 +40,20 @@ public interface UserService{
      * @author Yurii Midianyi
      */
     Page<UserDto> getAllUsers(Pageable pageable);
+
+    /**
+     * Method suspends user {@link User} by email.
+     *
+     * @param email of user which has to be suspended
+     * @author Yurii Midianyi
+     */
+    void suspendUser(String email);
+
+    /**
+     * Method activates user again {@link User} by email.
+     *
+     * @param email of user which is going to be activated
+     * @author Yurii Midianyi
+     */
+    void activateUser(String email);
 }

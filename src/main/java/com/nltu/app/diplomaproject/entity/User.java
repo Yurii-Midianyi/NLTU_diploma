@@ -81,6 +81,11 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

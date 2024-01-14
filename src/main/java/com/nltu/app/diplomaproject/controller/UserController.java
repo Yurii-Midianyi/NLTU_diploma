@@ -1,13 +1,15 @@
 package com.nltu.app.diplomaproject.controller;
 
-import com.nltu.app.diplomaproject.dto.QuestionDto;
+import com.nltu.app.diplomaproject.dto.EmailDto;
 import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,4 +32,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
+    @PatchMapping("/suspend")
+    public ResponseEntity<Void> suspendUser(@RequestBody EmailDto emailDto){
+        userService.suspendUser(emailDto.getEmail());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/activate")
+    public ResponseEntity<Void> activateUser(@RequestBody EmailDto emailDto){
+        userService.activateUser(emailDto.getEmail());
+        return ResponseEntity.noContent().build();
+    }
 }
