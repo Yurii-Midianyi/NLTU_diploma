@@ -1,7 +1,6 @@
 package com.nltu.app.diplomaproject.exceptions;
 
 import com.nltu.app.diplomaproject.dto.ExceptionDto;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -59,4 +58,11 @@ public class CustomExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionDto);
     }
+
+    @ExceptionHandler(value = {CustomAccessDeniedException.class})
+    public ResponseEntity<Object> handleCustomAccessDeniedException(CustomAccessDeniedException e){
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionDto);
+    }
+
 }

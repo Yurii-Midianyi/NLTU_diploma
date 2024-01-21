@@ -7,7 +7,9 @@ import com.nltu.app.diplomaproject.entity.Answer;
 import com.nltu.app.diplomaproject.entity.Question;
 import com.nltu.app.diplomaproject.entity.QuestionParticipant;
 import com.nltu.app.diplomaproject.entity.User;
+import com.nltu.app.diplomaproject.enums.Role;
 import com.nltu.app.diplomaproject.exceptions.AnswerNotFoundException;
+import com.nltu.app.diplomaproject.exceptions.CustomAccessDeniedException;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import com.nltu.app.diplomaproject.exceptions.NonExistingAnswerForQuestionException;
 import com.nltu.app.diplomaproject.exceptions.QuestionNotFoundException;
@@ -19,6 +21,7 @@ import com.nltu.app.diplomaproject.repository.UserRepo;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import com.nltu.app.diplomaproject.service.ResultMessages;
 import static com.nltu.app.diplomaproject.service.imp.UserServiceImpl.getAuthenticatedUser;
+import java.nio.file.AccessDeniedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -76,20 +79,27 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void deleteQuestion(Long id) {
-        try {
-            questionRepo.deleteById(id);
+    public void deleteQuestion(Long id){
+        User user = getAuthenticatedUser(userRepo);
+        Question question = questionRepo.findQuestionWithOrganizer(id).orElseThrow(()->
+                new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+        if(!question.getOrganizer().equals(user) &&
+                user.getAuthorities().stream().noneMatch(a->a.getAuthority().contains(Role.ADMIN.name()))){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
         }
-        catch (EmptyResultDataAccessException e){
-            throw new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND);
-        }
+        questionRepo.deleteById(id);
     }
 
     @Transactional
     @Override
     public QuestionDto updateQuestion(Long id, QuestionDto questionDto) {
+        User user = getAuthenticatedUser(userRepo);
         Question question = questionRepo.findById(id).orElseThrow(() ->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+
+        if(!question.getOrganizer().equals(user)){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
+        }
 
         answerRepo.deleteAllByQuestionId(id);
         questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(userRepo), question);

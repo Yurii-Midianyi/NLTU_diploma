@@ -18,5 +18,5 @@ public abstract class ExceptionMessage {
     public static final String ANSWER_SIZE_FAIL = "There can not be more than 10 answers";
     public static final String LIST_SIZE_FAIL = "The list of elements is too big";
     public static final String USER_SUSPENDED = "Sorry, the user was suspended";
-    public static final String INVALID_CREDENTIALS = "Invalid username or password";
+    public static final String ACCESS_DENIED = "You don't have access for this";
 }

@@ -3,7 +3,9 @@ package com.nltu.app.diplomaproject.service.imp;
 import com.nltu.app.diplomaproject.dto.AnswerDto;
 import com.nltu.app.diplomaproject.entity.Answer;
 import com.nltu.app.diplomaproject.entity.Question;
+import com.nltu.app.diplomaproject.entity.User;
 import com.nltu.app.diplomaproject.exceptions.AnswerNotFoundException;
+import com.nltu.app.diplomaproject.exceptions.CustomAccessDeniedException;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import com.nltu.app.diplomaproject.exceptions.QuestionNotFoundException;
 import com.nltu.app.diplomaproject.repository.AnswerRepo;
@@ -44,9 +46,15 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public AnswerDto updateAnswer(Long id, AnswerDto answerDto) {
+        User user = getAuthenticatedUser(userRepo);
         Answer answer = answerRepo.findById(id).orElseThrow(()->
                 new AnswerNotFoundException(ExceptionMessage.ANSWER_NOT_FOUND));
         Question question = questionRepo.findByAnswerId(id);
+
+        if(!question.getOrganizer().equals(user)){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
+        }
+
         questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(userRepo), question);
         answer.setAnswerText(answerDto.getAnswerText());
         answerRepo.save(answer);
@@ -56,7 +64,12 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     @Transactional
     public void deleteAnswer(Long id) {
+        User user = getAuthenticatedUser(userRepo);
         Question question = questionRepo.findByAnswerId(id);
+        if(!question.getOrganizer().equals(user)){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
+        }
+
         questionParticipantRepo.deleteAllByUserAndQuestion(getAuthenticatedUser(userRepo), question);
         try {
             answerRepo.deleteById(id);
