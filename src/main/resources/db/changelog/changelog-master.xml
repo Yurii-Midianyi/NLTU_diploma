@@ -16,4 +16,5 @@
     <include file="db/changelog/changelog-alter-table-user-add-enabled.xml"/>
     <include file="db/changelog/changelog-add-admin-user-table.xml"/>
     <include file="db/changelog/changelog-alter-table-user-rename-active.xml"/>
+    <include file="db/changelog/changelog-alter-question-table-isPrivate.xml"/>
 </databaseChangeLog>

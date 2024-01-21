@@ -111,7 +111,7 @@ public class QuestionServiceImpl implements QuestionService {
                     answer.setQuestion(question);
                     return answer;})
                 .collect(Collectors.toList()));
-        question.setIsAnonymous(questionDto.getIsAnonymous());
+        question.setIsPrivate(questionDto.getIsPrivate());
         questionRepo.save(question);
         return modelMapper.map(question, QuestionDto.class);
     }
@@ -156,8 +156,15 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public PollResultsDto getResults(Long id) {
-        questionRepo.findById(id).orElseThrow(()->
+        Question question = questionRepo.findQuestionWithOrganizer(id).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+
+        User user = getAuthenticatedUser(userRepo);
+
+        if(!question.getOrganizer().equals(user) && question.getIsPrivate()){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
+        }
+
         PollResultsDto pollResultsDto = new PollResultsDto();
         pollResultsDto.setCountOfParticipants(questionParticipantRepo.countDistinctUserByQuestionId(id));
         List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);

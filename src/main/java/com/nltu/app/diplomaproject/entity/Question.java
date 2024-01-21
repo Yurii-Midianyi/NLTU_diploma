@@ -39,7 +39,7 @@ public class Question {
     )
     private List<User> participants;
 
-    private Boolean isAnonymous;
+    private Boolean isPrivate;
 
     private LocalDateTime endDateTime;
 
@@ -50,14 +50,14 @@ public class Question {
                     List<Answer> answers,
                     User organizer,
                     List<User> participants,
-                    Boolean isAnonymous,
+                    Boolean isPrivate,
                     LocalDateTime endDateTime) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.organizer = organizer;
         this.participants = participants;
-        this.isAnonymous = isAnonymous;
+        this.isPrivate = isPrivate;
         this.endDateTime = endDateTime;
     }
 
@@ -107,12 +107,12 @@ public class Question {
         this.participants = participants;
     }
 
-    public Boolean getIsAnonymous() {
-        return isAnonymous;
+    public Boolean getIsPrivate() {
+        return isPrivate;
     }
 
-    public void setIsAnonymous(Boolean anonymous) {
-        isAnonymous = anonymous;
+    public void setIsPrivate(Boolean anonymous) {
+        isPrivate = anonymous;
     }
 
     public LocalDateTime getEndDateTime() {
