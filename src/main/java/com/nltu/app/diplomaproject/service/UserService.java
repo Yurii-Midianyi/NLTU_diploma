@@ -5,10 +5,10 @@ import com.nltu.app.diplomaproject.dto.UserDto;
 import com.nltu.app.diplomaproject.dto.UserLoginDto;
 import com.nltu.app.diplomaproject.dto.UserRegistrationDto;
 import com.nltu.app.diplomaproject.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService{
-
-
     /**
      * Method register user {@link User}.
      *
@@ -24,4 +24,36 @@ public interface UserService{
      * @author Yurii Midianyi
      */
     AuthenticationResponse authenticate(UserLoginDto userLoginDto);
+
+    /**
+     * Method gets user {@link User} by id.
+     *
+     * @param id user's id
+     * @author Yurii Midianyi
+     */
+    UserDto getUser(Long id);
+
+    /**
+     * Method gets pageable of user {@link User} by id.
+     *
+     * @param pageable of {@link Pageable}
+     * @author Yurii Midianyi
+     */
+    Page<UserDto> getAllUsers(Pageable pageable);
+
+    /**
+     * Method suspends user {@link User} by email.
+     *
+     * @param email of user which has to be suspended
+     * @author Yurii Midianyi
+     */
+    void suspendUser(String email);
+
+    /**
+     * Method activates user again {@link User} by email.
+     *
+     * @param email of user which is going to be activated
+     * @author Yurii Midianyi
+     */
+    void activateUser(String email);
 }

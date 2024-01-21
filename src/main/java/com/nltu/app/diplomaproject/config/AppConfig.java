@@ -1,11 +1,14 @@
 package com.nltu.app.diplomaproject.config;
 
+import com.nltu.app.diplomaproject.entity.User;
+import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
 import com.nltu.app.diplomaproject.repository.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,7 +32,7 @@ public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepo.findByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("User not found"));
+                .orElseThrow(()->new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
     }
 
     @Bean

@@ -1,12 +1,21 @@
 package com.nltu.app.diplomaproject.dto;
 
+import java.util.List;
+
 public class UserDto {
     private String firstName;
     private String lastName;
+    private String email;
+    List<QuestionUserParticipatedDto> questionsUserParticipated;
 
-    public UserDto(String firstName, String lastName) {
+    public UserDto(String firstName,
+                   String lastName,
+                   String email,
+                   List<QuestionUserParticipatedDto> questionsUserParticipated) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.questionsUserParticipated = questionsUserParticipated;
     }
     public UserDto() {}
 
@@ -26,11 +35,19 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return "userDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<QuestionUserParticipatedDto> getQuestionsUserParticipated() {
+        return questionsUserParticipated;
+    }
+
+    public void setQuestionsUserParticipated(List<QuestionUserParticipatedDto> questionsUserParticipated) {
+        this.questionsUserParticipated = questionsUserParticipated;
     }
 }
