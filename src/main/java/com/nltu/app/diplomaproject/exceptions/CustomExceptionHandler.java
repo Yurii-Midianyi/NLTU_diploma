@@ -67,7 +67,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionDto);
     }
 
-    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class, ConstraintViolationException.class})
     public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(){
         ExceptionDto exceptionDto = new ExceptionDto(ExceptionMessage.WRONG_FORMAT);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
@@ -78,12 +78,5 @@ public class CustomExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
     }
-
-    @ExceptionHandler(value = {ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e){
-        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
-    }
-
 
 }
