@@ -16,17 +16,24 @@ public class QuestionDto {
     @NotEmptyAnswers
     @ListMaxSize(message = ExceptionMessage.ANSWER_SIZE_FAIL)
     private List<AnswerDto> answers;
-    private Boolean isAnonymous;
+    private Boolean isPrivate;
     @Future(message = ExceptionMessage.END_DATE_VALIDATION_FAIL)
     private LocalDateTime endDateTime;
+    private Boolean hasMultipleAnswers;
 
     public QuestionDto() {}
-    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isAnonymous, LocalDateTime endDateTime) {
+    public QuestionDto(Long id,
+                       String questionText,
+                       List<AnswerDto> answers,
+                       Boolean isPrivate,
+                       LocalDateTime endDateTime,
+                       Boolean hasMultipleAnswers) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
-        this.isAnonymous = isAnonymous;
+        this.isPrivate = isPrivate;
         this.endDateTime = endDateTime;
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 
     public String getQuestionText() {
@@ -45,12 +52,12 @@ public class QuestionDto {
         this.answers = answers;
     }
 
-    public Boolean getIsAnonymous() {
-        return isAnonymous;
+    public Boolean getIsPrivate() {
+        return isPrivate;
     }
 
-    public void setIsAnonymous(Boolean anonymous) {
-        isAnonymous = anonymous;
+    public void setIsPrivate(Boolean anonymous) {
+        isPrivate = anonymous;
     }
 
     public Long getId() {
@@ -67,5 +74,13 @@ public class QuestionDto {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Boolean getHasMultipleAnswers() {
+        return hasMultipleAnswers;
+    }
+
+    public void setHasMultipleAnswers(Boolean hasMultipleAnswers) {
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 }

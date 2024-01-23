@@ -11,6 +11,7 @@ import com.nltu.app.diplomaproject.enums.Role;
 import com.nltu.app.diplomaproject.exceptions.AnswerNotFoundException;
 import com.nltu.app.diplomaproject.exceptions.CustomAccessDeniedException;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import com.nltu.app.diplomaproject.exceptions.MoreThanOneAnswerToQuestionException;
 import com.nltu.app.diplomaproject.exceptions.NonExistingAnswerForQuestionException;
 import com.nltu.app.diplomaproject.exceptions.QuestionNotFoundException;
 import com.nltu.app.diplomaproject.exceptions.VotingPeriodEndedException;
@@ -111,17 +112,33 @@ public class QuestionServiceImpl implements QuestionService {
                     answer.setQuestion(question);
                     return answer;})
                 .collect(Collectors.toList()));
-        question.setIsAnonymous(questionDto.getIsAnonymous());
+        question.setIsPrivate(questionDto.getIsPrivate());
         questionRepo.save(question);
         return modelMapper.map(question, QuestionDto.class);
     }
 
     @Override
     @Transactional
-    public String voteQuestion(Long questionId, List<Long> answerIds) {
-        User user = getAuthenticatedUser(userRepo);
+    public String chooseVoting(Long questionId, List<Long> answerIds){
         Question question = questionRepo.findById(questionId).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+
+
+        if(question.getHasMultipleAnswers()){
+            return voteQuestion(question, answerIds);
+        }
+        else {
+            if(answerIds.size()==1){
+                return voteQuestion(question, answerIds.get(0));
+            }
+            throw new MoreThanOneAnswerToQuestionException(ExceptionMessage.MORE_THAN_ONE_ANSWER_PROVIDED);
+        }
+    }
+
+    @Override
+    @Transactional
+    public String voteQuestion(Question question, List<Long> answerIds) {
+        User user = getAuthenticatedUser(userRepo);
 
         LocalDateTime endDateTime = question.getEndDateTime();
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -155,9 +172,48 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional
+    public String voteQuestion(Question question, Long answerId) {
+        User user = getAuthenticatedUser(userRepo);
+
+        LocalDateTime endDateTime = question.getEndDateTime();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        if (currentDateTime.isAfter(endDateTime)) {
+            throw new VotingPeriodEndedException(ExceptionMessage.VOTING_PERIOD_ENDED);
+        }
+
+        if(questionParticipantRepo.existsByUserAndQuestion(user, question)){
+            questionParticipantRepo.deleteAllByUserAndQuestion(user, question);
+        }
+
+        Answer answer = answerRepo.findById(answerId).orElseThrow(()->
+                new AnswerNotFoundException(ExceptionMessage.ANSWER_NOT_FOUND));
+
+        if(!question.getAnswers().contains(answer)){
+            throw new NonExistingAnswerForQuestionException(ExceptionMessage.WRONG_ANSWER_ID);
+        }
+
+        QuestionParticipant questionParticipant = new QuestionParticipant();
+        questionParticipant.setUser(user);
+        questionParticipant.setQuestion(question);
+        questionParticipant.setAnswer(answer);
+
+        questionParticipantRepo.save(questionParticipant);
+        return ResultMessages.VOTE_SAVED;
+    }
+
+    @Override
     public PollResultsDto getResults(Long id) {
-        questionRepo.findById(id).orElseThrow(()->
+        Question question = questionRepo.findQuestionWithOrganizer(id).orElseThrow(()->
                 new QuestionNotFoundException(ExceptionMessage.QUESTION_NOT_FOUND));
+
+        User user = getAuthenticatedUser(userRepo);
+
+        if(!question.getOrganizer().equals(user) && question.getIsPrivate()){
+            throw new CustomAccessDeniedException(ExceptionMessage.ACCESS_DENIED);
+        }
+
         PollResultsDto pollResultsDto = new PollResultsDto();
         pollResultsDto.setCountOfParticipants(questionParticipantRepo.countDistinctUserByQuestionId(id));
         List<AnswerResultDto> answerResults = questionParticipantRepo.countAnswerResults(id);
@@ -188,10 +244,4 @@ public class QuestionServiceImpl implements QuestionService {
         return ResultMessages.VOTE_CANCELED;
     }
 
-    /*public User getAuthenticatedUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-        return userRepo.findByEmail(currentPrincipalName).orElseThrow(()->
-                new UsernameNotFoundException(ExceptionMessage.USER_NOT_FOUND));
-    }*/
 }
