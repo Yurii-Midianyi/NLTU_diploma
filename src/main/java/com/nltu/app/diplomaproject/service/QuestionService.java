@@ -19,7 +19,11 @@ public interface QuestionService {
 
     QuestionDto updateQuestion(Long id, QuestionDto questionDto);
 
-    String voteQuestion(Long questionId, List<Long> answerIds);
+    String chooseVoting(Long questionId, List<Long> answerIds);
+
+    String voteQuestion(Question question, List<Long> answerIds);
+
+    String voteQuestion(Question question, Long answerId);
 
     PollResultsDto getResults(Long id);
 

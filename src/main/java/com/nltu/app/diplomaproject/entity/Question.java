@@ -2,6 +2,7 @@ package com.nltu.app.diplomaproject.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,8 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String questionText;
     @JsonManagedReference
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -39,9 +42,14 @@ public class Question {
     )
     private List<User> participants;
 
+    @Column
     private Boolean isPrivate;
 
+    @Column
     private LocalDateTime endDateTime;
+
+    @Column
+    private Boolean hasMultipleAnswers;
 
     public Question(){}
 
@@ -51,7 +59,8 @@ public class Question {
                     User organizer,
                     List<User> participants,
                     Boolean isPrivate,
-                    LocalDateTime endDateTime) {
+                    LocalDateTime endDateTime,
+                    Boolean hasMultipleAnswers) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
@@ -59,6 +68,7 @@ public class Question {
         this.participants = participants;
         this.isPrivate = isPrivate;
         this.endDateTime = endDateTime;
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 
     @PrePersist
@@ -121,5 +131,13 @@ public class Question {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Boolean getHasMultipleAnswers() {
+        return hasMultipleAnswers;
+    }
+
+    public void setHasMultipleAnswers(Boolean hasMultipleAnswers) {
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 }

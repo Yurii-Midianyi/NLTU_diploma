@@ -19,14 +19,21 @@ public class QuestionDto {
     private Boolean isPrivate;
     @Future(message = ExceptionMessage.END_DATE_VALIDATION_FAIL)
     private LocalDateTime endDateTime;
+    private Boolean hasMultipleAnswers;
 
     public QuestionDto() {}
-    public QuestionDto(Long id, String questionText, List<AnswerDto> answers, Boolean isPrivate, LocalDateTime endDateTime) {
+    public QuestionDto(Long id,
+                       String questionText,
+                       List<AnswerDto> answers,
+                       Boolean isPrivate,
+                       LocalDateTime endDateTime,
+                       Boolean hasMultipleAnswers) {
         this.id = id;
         this.questionText = questionText;
         this.answers = answers;
         this.isPrivate = isPrivate;
         this.endDateTime = endDateTime;
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 
     public String getQuestionText() {
@@ -67,5 +74,13 @@ public class QuestionDto {
 
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Boolean getHasMultipleAnswers() {
+        return hasMultipleAnswers;
+    }
+
+    public void setHasMultipleAnswers(Boolean hasMultipleAnswers) {
+        this.hasMultipleAnswers = hasMultipleAnswers;
     }
 }

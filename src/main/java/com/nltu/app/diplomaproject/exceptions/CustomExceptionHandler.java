@@ -1,6 +1,7 @@
 package com.nltu.app.diplomaproject.exceptions;
 
 import com.nltu.app.diplomaproject.dto.ExceptionDto;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
@@ -64,5 +66,24 @@ public class CustomExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionDto);
     }
+
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(){
+        ExceptionDto exceptionDto = new ExceptionDto(ExceptionMessage.WRONG_FORMAT);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
+    }
+
+    @ExceptionHandler(value = {MoreThanOneAnswerToQuestionException.class})
+    public ResponseEntity<Object> handleMoreThanOneAnswerToQuestionException(MoreThanOneAnswerToQuestionException e){
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
+    }
+
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e){
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
+    }
+
 
 }

@@ -19,4 +19,7 @@ public abstract class ExceptionMessage {
     public static final String LIST_SIZE_FAIL = "The list of elements is too big";
     public static final String USER_SUSPENDED = "Sorry, the user was suspended";
     public static final String ACCESS_DENIED = "You don't have access for this";
+    public static final String WRONG_FORMAT = "Provided values are not correct";
+    public static final String MORE_THAN_ONE_ANSWER_PROVIDED = "You can only choose one option for this question";
+
 }
