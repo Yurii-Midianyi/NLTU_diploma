@@ -29,20 +29,9 @@ public class WebSecurity{
         http.csrf().disable()
                 .cors().disable()
                 .authorizeHttpRequests()
-
-                .anyRequest().permitAll()
-
-                    /*.requestMatchers("/v2/api-docs/**").permitAll()
-                    .requestMatchers("/v3/api-docs/**").permitAll()
-                    .requestMatchers("/swagger.json").permitAll()
-                    .requestMatchers("/swagger-ui.html").permitAll()
-                    .requestMatchers("/swagger-resources/**").permitAll()
-                    .requestMatchers("/webjars/**").permitAll()
-                    .requestMatchers("/swagger-ui/**").permitAll()
-
                     .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                     .requestMatchers(HttpMethod.PATCH, "/users/suspend", "/users/activate").hasAuthority("ADMIN")
-                .anyRequest().authenticated()*/
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,8 +52,7 @@ public class WebSecurity{
             web.ignoring().requestMatchers("/swagger-resources/**");
             web.ignoring().requestMatchers("/webjars/**");
             web.ignoring().requestMatchers("/swagger-ui/**");
-
-            web.ignoring().requestMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**");
+            web.ignoring().requestMatchers("/configuration/ui");
         };
     }
 }

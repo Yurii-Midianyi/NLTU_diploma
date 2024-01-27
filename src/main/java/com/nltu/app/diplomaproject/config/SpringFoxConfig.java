@@ -30,47 +30,4 @@ public class SpringFoxConfig {
                 .openapi("3.1.0");
     }
 
-
-    /*@Bean
-    public Docket customImplementation() {
-
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .paths(PathSelectors.any())
-                //.apis(RequestHandlerSelectors.basePackage("com.nltu.app.diplomaproject"))
-                .build()
-                .securitySchemes(List.of(apiKey()))
-                .securityContexts(Collections.singletonList(securityContext()))
-                .apiInfo(apiInfo())
-                .pathMapping("/")
-                .useDefaultResponseMessages(false)
-                .directModelSubstitute(LocalDate.class, String.class)
-                .genericModelSubstitutes(ResponseEntity.class);
-    }
-
-    ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Swagger with Spring Boot + Security")
-                .version("1.0.0")
-                .description("Your Description")
-                .contact(new Contact("Contact Name", "Contact_URL","contact@email.com"))
-                .build();
-    }
-
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth()).build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
-    }*/
-
-
 }
