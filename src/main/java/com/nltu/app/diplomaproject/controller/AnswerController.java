@@ -1,7 +1,12 @@
 package com.nltu.app.diplomaproject.controller;
 
+import com.nltu.app.diplomaproject.constants.HttpStatuses;
 import com.nltu.app.diplomaproject.dto.AnswerDto;
 import com.nltu.app.diplomaproject.service.AnswerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,15 +26,33 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-
+    @Operation(summary = "Update answer by id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED),
+            @ApiResponse(responseCode = "403", description = HttpStatuses.FORBIDDEN),
+    })
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateAnswer(@Valid @PathVariable Long id,
-                                            @RequestBody AnswerDto answerDto){
+    public ResponseEntity<?> updateAnswer(
+            @Parameter(description = "Id of answer which will be updated")
+            @Valid @PathVariable Long id,
+            @RequestBody AnswerDto answerDto){
+
         return ResponseEntity.ok(answerService.updateAnswer(id, answerDto));
     }
 
+    @Operation(summary = "Delete answer by id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
+            @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED),
+            @ApiResponse(responseCode = "403", description = HttpStatuses.FORBIDDEN)
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
+    public ResponseEntity<Void> deleteAnswer(
+            @Parameter(description = "Id of answer which will be deleted") @PathVariable Long id){
+
         answerService.deleteAnswer(id);
         return ResponseEntity.noContent().build();
     }

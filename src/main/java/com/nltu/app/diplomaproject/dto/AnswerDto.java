@@ -1,10 +1,12 @@
 package com.nltu.app.diplomaproject.dto;
 
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 
 public class AnswerDto {
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "1")
     private Long id;
 
     private String answerText;
