@@ -3,6 +3,7 @@ package com.nltu.app.diplomaproject.dto;
 import com.nltu.app.diplomaproject.annotations.ListMaxSize;
 import com.nltu.app.diplomaproject.annotations.NotEmptyAnswers;
 import com.nltu.app.diplomaproject.exceptions.ExceptionMessage;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionDto {
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "1")
     private Long id;
     @NotBlank(message = ExceptionMessage.QUESTION_VALIDATION_FAIL)
     private String questionText;
