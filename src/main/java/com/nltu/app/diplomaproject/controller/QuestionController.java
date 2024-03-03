@@ -125,7 +125,7 @@ public class QuestionController {
     })
     @PostMapping("/{id}/vote")
     public ResponseEntity<String> voteQuestion(@Parameter(description = "Id of question") @PathVariable Long id,
-                                               @RequestParam(value = "Id of answer") @Valid @NotEmpty @NotNull List<Long> answerIds){
+                                               @RequestParam @Valid @NotEmpty @NotNull List<Long> answerIds){
         return ResponseEntity.ok(questionService.chooseVoting(id, answerIds));
     }
 
