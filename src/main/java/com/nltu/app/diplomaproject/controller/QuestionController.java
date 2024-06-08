@@ -4,11 +4,9 @@ import com.nltu.app.diplomaproject.constants.HttpStatuses;
 import com.nltu.app.diplomaproject.dto.PollResultsDto;
 import com.nltu.app.diplomaproject.dto.QuestionDto;
 import com.nltu.app.diplomaproject.entity.Question;
-import com.nltu.app.diplomaproject.service.AnswerService;
 import com.nltu.app.diplomaproject.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -59,6 +57,7 @@ public class QuestionController {
     @Operation(summary = "Create question")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = HttpStatuses.OK),
+            @ApiResponse(responseCode = "201", description = HttpStatuses.CREATED),
             @ApiResponse(responseCode = "400", description = HttpStatuses.BAD_REQUEST),
             @ApiResponse(responseCode = "401", description = HttpStatuses.UNAUTHORIZED),
     })

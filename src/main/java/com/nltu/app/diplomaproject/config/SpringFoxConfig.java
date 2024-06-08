@@ -22,12 +22,11 @@ public class SpringFoxConfig {
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")))
-                .info(new Info().title("Greencity API")
+                .info(new Info().title("Diploma API")
                         .summary("Api Documentation")
                         .version("3.1.0")
                         .license(new License().name("Apache 2.0").identifier("Apache-2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
                 .openapi("3.1.0");
     }
-
 }
